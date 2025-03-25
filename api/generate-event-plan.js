@@ -15,7 +15,9 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
-    if (req.method === 'POST') {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Only POST requests allowed' });
+    }
         const { budgetRange, colorScheme, entertainment, eventType, foodPreference, guestCount, theme } = req.body;
 
         const prompt = `
@@ -50,8 +52,6 @@ export default async function handler(req, res) {
             console.error('Error generating event plan:', error);
             res.status(500).json({ error: 'Failed to generate event plan.' });
         }
-    } else {
-        res.status(405).json({ error: "Method not allowed" });
-    }
+    
 }
 
